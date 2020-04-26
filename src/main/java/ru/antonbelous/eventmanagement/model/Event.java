@@ -1,6 +1,8 @@
 package ru.antonbelous.eventmanagement.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Event {
 
@@ -8,13 +10,9 @@ public class Event {
     private LocalDateTime startDateTime;
     private String description;
     private Status currentStatus;
-    private User userId;
 
-    public Event(LocalDateTime startDateTime, String description, Status currentStatus, User userId) {
-        this.startDateTime = startDateTime;
-        this.description = description;
-        this.currentStatus = currentStatus;
-        this.userId = userId;
+    public Event(LocalDateTime startDateTime, String description, Status currentStatus) {
+        this(null, startDateTime, description, currentStatus);
     }
 
     public Event(Integer id, LocalDateTime startDateTime, String description, Status currentStatus) {
@@ -56,12 +54,16 @@ public class Event {
         this.currentStatus = currentStatus;
     }
 
-    public User getUserId() {
-        return userId;
+    public LocalDate getDate() {
+        return startDateTime.toLocalDate();
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public LocalTime getTime() {
+        return startDateTime.toLocalTime();
+    }
+
+    public boolean isNew() {
+        return id == null;
     }
 
     @Override
