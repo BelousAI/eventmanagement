@@ -3,10 +3,8 @@ package ru.antonbelous.eventmanagement.model;
 import java.util.Date;
 import java.util.Set;
 
-public class User {
+public class User extends AbstractNamedEntity {
 
-    private Integer id;
-    private String name;
     private String email;
     private String password;
     private boolean enabled = true;
@@ -14,29 +12,12 @@ public class User {
     private Set<Role> roles;
 
     public User(Integer id, String name, String email, String password, boolean enabled, Date registered, Set<Role> roles) {
-        this.id = id;
-        this.name = name;
+        super(id, name);
         this.email = email;
         this.password = password;
         this.enabled = enabled;
         this.registered = registered;
         this.roles = roles;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {

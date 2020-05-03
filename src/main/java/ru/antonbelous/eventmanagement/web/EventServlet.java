@@ -3,7 +3,7 @@ package ru.antonbelous.eventmanagement.web;
 import ru.antonbelous.eventmanagement.model.Event;
 import ru.antonbelous.eventmanagement.model.Status;
 import ru.antonbelous.eventmanagement.repository.EventRepository;
-import ru.antonbelous.eventmanagement.repository.InMemoryEventRepository;
+import ru.antonbelous.eventmanagement.repository.inmemory.InMemoryEventRepository;
 import ru.antonbelous.eventmanagement.util.EventUtil;
 
 import javax.servlet.ServletConfig;
@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+
+import static ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository.USER_ID;
 
 public class EventServlet extends HttpServlet {
 
@@ -33,20 +35,20 @@ public class EventServlet extends HttpServlet {
         switch (action == null ? "all" : action) {
             case "delete":
                 int id = getId(request);
-                repository.delete(id);
+                repository.delete(id, USER_ID);
                 response.sendRedirect("events");
                 break;
             case "create":
             case "update":
                 final Event event = action.equals("create") ?
                         new Event(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", Status.PLANNED) :
-                        repository.get(getId(request));
+                        repository.get(getId(request), USER_ID);
                 request.setAttribute("event", event);
                 request.getRequestDispatcher("/eventForm.jsp").forward(request, response);
                 break;
             case "all":
             default:
-                request.setAttribute("events", EventUtil.getTos(repository.getAll()));
+                request.setAttribute("events", EventUtil.getTos(repository.getAll(USER_ID)));
                 request.getRequestDispatcher("/events.jsp").forward(request, response);
                 break;
         }
@@ -62,7 +64,7 @@ public class EventServlet extends HttpServlet {
                 request.getParameter("description"),
                 Status.valueOf(request.getParameter("status")));
 
-        repository.save(event);
+        repository.save(event, USER_ID);
         response.sendRedirect("events");
     }
 

@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 
 public class EventUtil {
 
-    public static final Status DEFAULT_STATUS = Status.PLANNED;
-
     public static final List<Event> EVENTS = Arrays.asList(
             new Event(LocalDateTime.of(2020, Month.APRIL, 28, 9, 0), "Позвонить заведующей аптеки", Status.PLANNED),
             new Event(LocalDateTime.of(2020, Month.APRIL, 29, 11, 0), "Встреча с доктором Петровой В.В.", Status.PLANNED),
