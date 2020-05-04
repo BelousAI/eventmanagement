@@ -1,16 +1,19 @@
 package ru.antonbelous.eventmanagement.repository.inmemory;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import ru.antonbelous.eventmanagement.model.Event;
 import ru.antonbelous.eventmanagement.model.Status;
 import ru.antonbelous.eventmanagement.repository.EventRepository;
 import ru.antonbelous.eventmanagement.util.EventUtil;
+import ru.antonbelous.eventmanagement.util.Util;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
@@ -54,11 +57,20 @@ public class InMemoryEventRepository implements EventRepository {
     }
 
     @Override
-    //Fix with Spring
     public List<Event> getAll(int userId) {
+        return getAllFiltered(userId, event -> true);
+    }
+
+    @Override
+    public List<Event> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
+        return getAllFiltered(userId, event -> Util.isBetweenHalfOpen(event.getStartDateTime(), startDateTime, endDateTime));
+    }
+
+    private List<Event> getAllFiltered(int userId, Predicate<Event> filter) {
         Map<Integer, Event> eventMap = uidToEventMap.get(userId);
-        return eventMap == null ? Collections.emptyList() :
+        return CollectionUtils.isEmpty(eventMap) ? Collections.emptyList() :
                 eventMap.values().stream()
+                .filter(filter)
                 .sorted(Comparator.comparing(Event::getStartDateTime).reversed())
                 .collect(Collectors.toList());
     }

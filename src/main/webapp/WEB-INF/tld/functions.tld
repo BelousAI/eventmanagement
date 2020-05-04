@@ -10,7 +10,7 @@
 
     <function>
         <name>formatDateTime</name>
-        <function-class>ru.antonbelous.eventmanagement.util.Util</function-class>
+        <function-class>ru.antonbelous.eventmanagement.util.DateTimeUtil</function-class>
         <function-signature>java.lang.String toString(java.time.LocalDateTime)</function-signature>
     </function>
 </taglib>

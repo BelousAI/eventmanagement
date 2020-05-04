@@ -2,6 +2,7 @@ package ru.antonbelous.eventmanagement.repository;
 
 import ru.antonbelous.eventmanagement.model.Event;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventRepository {
@@ -17,4 +18,7 @@ public interface EventRepository {
 
     // ORDERED dateTime desc
     List<Event> getAll(int userId);
+
+    // ORDERED dateTime desc
+    List<Event> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 }

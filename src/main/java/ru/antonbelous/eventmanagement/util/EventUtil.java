@@ -30,7 +30,7 @@ public class EventUtil {
     }
 
     public static List<EventTo> getFilteredTos(Collection<Event> events, LocalTime startTime, LocalTime endTime) {
-        return filteredByStreams(events, event -> Util.isBetweenInclusive(event.getTime(), startTime, endTime));
+        return filteredByStreams(events, event -> Util.isBetweenHalfOpen(event.getTime(), startTime, endTime));
     }
 
     public static List<EventTo> filteredByStreams(Collection<Event> events, Predicate<Event> filter) {
