@@ -1,5 +1,6 @@
 package ru.antonbelous.eventmanagement.repository.inmemory;
 
+import org.springframework.stereotype.Repository;
 import ru.antonbelous.eventmanagement.model.Event;
 import ru.antonbelous.eventmanagement.model.Status;
 import ru.antonbelous.eventmanagement.repository.EventRepository;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 import static ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository.ADMIN_ID;
 import static ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository.USER_ID;
 
+@Repository
 public class InMemoryEventRepository implements EventRepository {
 
     // Map  userId -> (eventId-> event)

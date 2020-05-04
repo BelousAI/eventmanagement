@@ -1,19 +1,20 @@
 package ru.antonbelous.eventmanagement.service;
 
+import org.springframework.stereotype.Service;
 import ru.antonbelous.eventmanagement.model.User;
 import ru.antonbelous.eventmanagement.repository.UserRepository;
-import ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository;
 
 import java.util.List;
 
 import static ru.antonbelous.eventmanagement.util.ValidationUtil.checkNotFound;
 import static ru.antonbelous.eventmanagement.util.ValidationUtil.checkNotFoundWithId;
 
+@Service
 public class UserService {
 
-    private UserRepository repository;
+    private final UserRepository repository;
 
-    public void setRepository(InMemoryUserRepository repository) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
     }
 

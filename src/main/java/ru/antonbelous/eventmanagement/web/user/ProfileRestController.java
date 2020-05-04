@@ -1,9 +1,11 @@
 package ru.antonbelous.eventmanagement.web.user;
 
+import org.springframework.stereotype.Controller;
 import ru.antonbelous.eventmanagement.model.User;
 
 import static ru.antonbelous.eventmanagement.web.SecurityUtil.authUserId;
 
+@Controller
 public class ProfileRestController extends AbstractUserController {
 
     public User get() {

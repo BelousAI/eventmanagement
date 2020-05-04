@@ -1,5 +1,6 @@
 package ru.antonbelous.eventmanagement.repository.inmemory;
 
+import org.springframework.stereotype.Repository;
 import ru.antonbelous.eventmanagement.model.User;
 import ru.antonbelous.eventmanagement.repository.UserRepository;
 
@@ -10,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Repository
 public class InMemoryUserRepository implements UserRepository {
     private Map<Integer, User> userMap = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);

@@ -2,6 +2,7 @@ package ru.antonbelous.eventmanagement.web.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.antonbelous.eventmanagement.model.User;
 import ru.antonbelous.eventmanagement.service.UserService;
 
@@ -13,6 +14,7 @@ import static ru.antonbelous.eventmanagement.util.ValidationUtil.assureIdConsist
 public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(AbstractUserController.class);
 
+    @Autowired
     private UserService service;
 
     public User create(User user) {

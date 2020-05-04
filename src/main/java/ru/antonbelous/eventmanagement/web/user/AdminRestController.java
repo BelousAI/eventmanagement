@@ -1,9 +1,11 @@
 package ru.antonbelous.eventmanagement.web.user;
 
+import org.springframework.stereotype.Controller;
 import ru.antonbelous.eventmanagement.model.User;
 
 import java.util.List;
 
+@Controller
 public class AdminRestController extends AbstractUserController {
     @Override
     public User create(User user) {
