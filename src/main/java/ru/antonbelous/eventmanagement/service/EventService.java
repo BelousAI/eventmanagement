@@ -1,14 +1,16 @@
 package ru.antonbelous.eventmanagement.service;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.antonbelous.eventmanagement.model.Event;
 import ru.antonbelous.eventmanagement.repository.EventRepository;
 
+import java.time.LocalDate;
+import java.util.List;
 
-import java.util.Collection;
-
+import static ru.antonbelous.eventmanagement.util.DateTimeUtil.getEndExclusive;
+import static ru.antonbelous.eventmanagement.util.DateTimeUtil.getStartInclusive;
 import static ru.antonbelous.eventmanagement.util.ValidationUtil.checkNotFoundWithId;
-import static ru.antonbelous.eventmanagement.util.ValidationUtil.checkNotFound;
 
 @Service
 public class EventService {
@@ -35,7 +37,11 @@ public class EventService {
         return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
-    public Collection<Event> getAll(int userId) {
+    public List<Event> getAll(int userId) {
         return repository.getAll(userId);
+    }
+
+    public List<Event> getBetweenHalfOpen(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
+        return repository.getBetweenHalfOpen(getStartInclusive(startDate), getEndExclusive(endDate), userId);
     }
 }

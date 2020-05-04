@@ -4,9 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class Event {
+public class Event extends AbstractBaseEntity {
 
-    private Integer id;
     private LocalDateTime startDateTime;
     private String description;
     private Status currentStatus;
@@ -16,18 +15,10 @@ public class Event {
     }
 
     public Event(Integer id, LocalDateTime startDateTime, String description, Status currentStatus) {
-        this.id = id;
+        super(id);
         this.startDateTime = startDateTime;
         this.description = description;
         this.currentStatus = currentStatus;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public LocalDateTime getStartDateTime() {
@@ -60,10 +51,6 @@ public class Event {
 
     public LocalTime getTime() {
         return startDateTime.toLocalTime();
-    }
-
-    public boolean isNew() {
-        return id == null;
     }
 
     @Override
