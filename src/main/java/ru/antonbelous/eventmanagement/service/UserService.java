@@ -2,6 +2,7 @@ package ru.antonbelous.eventmanagement.service;
 
 import ru.antonbelous.eventmanagement.model.User;
 import ru.antonbelous.eventmanagement.repository.UserRepository;
+import ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository;
 
 import java.util.List;
 
@@ -11,6 +12,10 @@ import static ru.antonbelous.eventmanagement.util.ValidationUtil.checkNotFoundWi
 public class UserService {
 
     private UserRepository repository;
+
+    public void setRepository(InMemoryUserRepository repository) {
+        this.repository = repository;
+    }
 
     public User create(User user) {
         return repository.save(user);
