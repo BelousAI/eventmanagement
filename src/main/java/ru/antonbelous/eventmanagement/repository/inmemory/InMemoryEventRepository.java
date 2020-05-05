@@ -1,7 +1,6 @@
 package ru.antonbelous.eventmanagement.repository.inmemory;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 import ru.antonbelous.eventmanagement.model.Event;
 import ru.antonbelous.eventmanagement.model.Status;
 import ru.antonbelous.eventmanagement.repository.EventRepository;
@@ -12,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -22,9 +20,8 @@ import static ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRep
 @Repository
 public class InMemoryEventRepository implements EventRepository {
 
-    // Map  userId -> (eventId-> event)
-    private Map<Integer, Map<Integer, Event>> uidToEventMap = new ConcurrentHashMap<>();
-    private AtomicInteger counter = new AtomicInteger(0);
+    // Map  userId -> eventRepository
+    private Map<Integer, InMemoryBaseRepository<Event>> uidToEventMap = new ConcurrentHashMap<>();
 
     {
         EventUtil.EVENTS.forEach(event -> save(event, USER_ID));
@@ -34,26 +31,20 @@ public class InMemoryEventRepository implements EventRepository {
 
     @Override
     public Event save(Event event, int userId) {
-        Map<Integer, Event> eventMap = uidToEventMap.computeIfAbsent(userId, ConcurrentHashMap::new);
-        if (event.isNew()) {
-            event.setId(counter.incrementAndGet());
-            eventMap.put(event.getId(), event);
-            return event;
-        }
-        // handle case: update if present in storage
-        return eventMap.computeIfPresent(event.getId(), (id, oldEvent) -> event);
+        InMemoryBaseRepository<Event> events = uidToEventMap.computeIfAbsent(userId, uid -> new InMemoryBaseRepository<>());
+        return events.save(event);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        Map<Integer, Event> eventMap = uidToEventMap.get(userId);
-        return eventMap != null && eventMap.remove(id) != null;
+        InMemoryBaseRepository<Event> events = uidToEventMap.get(userId);
+        return events != null && events.delete(id);
     }
 
     @Override
     public Event get(int id, int userId) {
-        Map<Integer, Event> eventMap = uidToEventMap.get(userId);
-        return eventMap == null ? null : eventMap.get(id);
+        InMemoryBaseRepository<Event> events = uidToEventMap.get(userId);
+        return events == null ? null : events.get(id);
     }
 
     @Override
@@ -67,9 +58,9 @@ public class InMemoryEventRepository implements EventRepository {
     }
 
     private List<Event> getAllFiltered(int userId, Predicate<Event> filter) {
-        Map<Integer, Event> eventMap = uidToEventMap.get(userId);
-        return CollectionUtils.isEmpty(eventMap) ? Collections.emptyList() :
-                eventMap.values().stream()
+        InMemoryBaseRepository<Event> events = uidToEventMap.get(userId);
+        return events == null ? Collections.emptyList() :
+                events.getCollection().stream()
                 .filter(filter)
                 .sorted(Comparator.comparing(Event::getStartDateTime).reversed())
                 .collect(Collectors.toList());
