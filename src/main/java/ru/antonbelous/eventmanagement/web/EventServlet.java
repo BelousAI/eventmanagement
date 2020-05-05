@@ -1,10 +1,11 @@
 package ru.antonbelous.eventmanagement.web;
 
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.StringUtils;
 import ru.antonbelous.eventmanagement.model.Event;
 import ru.antonbelous.eventmanagement.model.Status;
-import ru.antonbelous.eventmanagement.repository.EventRepository;
-import ru.antonbelous.eventmanagement.repository.inmemory.InMemoryEventRepository;
-import ru.antonbelous.eventmanagement.util.EventUtil;
+import ru.antonbelous.eventmanagement.web.event.EventRestController;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -12,20 +13,31 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-import static ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository.USER_ID;
+import static ru.antonbelous.eventmanagement.util.DateTimeUtil.parseLocalDate;
+import static ru.antonbelous.eventmanagement.util.DateTimeUtil.parseLocalTime;
 
 public class EventServlet extends HttpServlet {
 
-    private EventRepository repository;
+    private ConfigurableApplicationContext springContext;
+    private EventRestController eventController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        repository = new InMemoryEventRepository();
+        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        eventController = springContext.getBean(EventRestController.class);
+    }
+
+    @Override
+    public void destroy() {
+        springContext.close();
+        super.destroy();
     }
 
     @Override
@@ -35,20 +47,28 @@ public class EventServlet extends HttpServlet {
         switch (action == null ? "all" : action) {
             case "delete":
                 int id = getId(request);
-                repository.delete(id, USER_ID);
+                eventController.delete(id);
                 response.sendRedirect("events");
                 break;
             case "create":
             case "update":
-                final Event event = action.equals("create") ?
+                final Event event = "create".equals(action) ?
                         new Event(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", Status.PLANNED) :
-                        repository.get(getId(request), USER_ID);
+                        eventController.get(getId(request));
                 request.setAttribute("event", event);
                 request.getRequestDispatcher("/eventForm.jsp").forward(request, response);
                 break;
+            case "filter":
+                LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
+                LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
+                LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
+                LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
+                request.setAttribute("events", eventController.getBetweenHalfOpen(startDate, startTime, endDate, endTime));
+                request.getRequestDispatcher("/events.jsp").forward(request, response);
+                break;
             case "all":
             default:
-                request.setAttribute("events", EventUtil.getTos(repository.getAll(USER_ID)));
+                request.setAttribute("events", eventController.getAll());
                 request.getRequestDispatcher("/events.jsp").forward(request, response);
                 break;
         }
@@ -57,14 +77,17 @@ public class EventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String id = request.getParameter("id");
 
-        Event event = new Event(id.isEmpty() ? null : Integer.valueOf(id),
+        Event event = new Event(
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Status.valueOf(request.getParameter("status")));
 
-        repository.save(event, USER_ID);
+        if (StringUtils.isEmpty(request.getParameter("id"))) {
+            eventController.create(event);
+        } else {
+            eventController.update(event, getId(request));
+        }
         response.sendRedirect("events");
     }
 
