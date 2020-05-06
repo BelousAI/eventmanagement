@@ -1,4 +1,4 @@
-package ru.antonbelous.eventmanagement.web;
+package ru.antonbelous.eventmanagement;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

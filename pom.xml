@@ -19,6 +19,9 @@
         <!-- Logging -->
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.30</slf4j.version>
+
+        <!--    Tests  -->
+        <junit.version>4.13</junit.version>
     </properties>
 
     <build>
@@ -89,6 +92,13 @@
             <version>1.2</version>
         </dependency>
 
+        <!--Test-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

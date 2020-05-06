@@ -1,7 +1,6 @@
-package ru.antonbelous.eventmanagement.repository.inmemory;
+package ru.antonbelous.eventmanagement.inmemory;
 
 import ru.antonbelous.eventmanagement.model.AbstractBaseEntity;
-import ru.antonbelous.eventmanagement.repository.EventRepository;
 
 import java.util.Collection;
 import java.util.Map;
@@ -12,7 +11,7 @@ public class InMemoryBaseRepository<T extends AbstractBaseEntity> {
 
     private static AtomicInteger counter = new AtomicInteger(0);
 
-    private Map<Integer, T> map = new ConcurrentHashMap<>();
+    Map<Integer, T> map = new ConcurrentHashMap<>();
 
     public T save(T entry) {
         if (entry.isNew()) {
