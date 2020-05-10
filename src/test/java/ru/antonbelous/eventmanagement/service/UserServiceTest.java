@@ -1,5 +1,6 @@
 package ru.antonbelous.eventmanagement.service;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -11,6 +12,7 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.antonbelous.eventmanagement.model.Role;
 import ru.antonbelous.eventmanagement.model.User;
+import ru.antonbelous.eventmanagement.repository.UserRepository;
 import ru.antonbelous.eventmanagement.util.exception.NotFoundException;
 
 import java.util.List;
@@ -32,6 +34,9 @@ public class UserServiceTest {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private UserRepository repository;
+
     @Test
     public void create() throws Exception {
         User newUser = getNew();
@@ -47,10 +52,10 @@ public class UserServiceTest {
         service.create(new User(null, "UserDuplicate", "user@mail.ru", "user", Role.USER));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        service.get(USER_ID);
+        Assert.assertNull(repository.get(USER_ID));
     }
 
     @Test(expected = NotFoundException.class)

@@ -59,12 +59,12 @@ public class EventRestController {
         return EventUtil.getTos(service.getAll(userId));
     }
 
-    public List<EventTo> getBetweenHalfOpen(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
-                                            @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
+    public List<EventTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
+                                    @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
         int userId = SecurityUtil.authUserId();
         log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
 
-        List<Event> events = service.getBetweenHalfOpen(startDate, endDate, userId);
+        List<Event> events = service.getBetweenInclusive(startDate, endDate, userId);
         return EventUtil.getFilteredTos(events, startTime, endTime);
     }
 }

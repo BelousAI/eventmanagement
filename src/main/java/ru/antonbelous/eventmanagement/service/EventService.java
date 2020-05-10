@@ -8,8 +8,8 @@ import ru.antonbelous.eventmanagement.repository.EventRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.antonbelous.eventmanagement.util.DateTimeUtil.getEndExclusive;
-import static ru.antonbelous.eventmanagement.util.DateTimeUtil.getStartInclusive;
+import static ru.antonbelous.eventmanagement.util.DateTimeUtil.atStartOfNextDayOrMax;
+import static ru.antonbelous.eventmanagement.util.DateTimeUtil.atStartOfDayOrMin;
 import static ru.antonbelous.eventmanagement.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -41,7 +41,7 @@ public class EventService {
         return repository.getAll(userId);
     }
 
-    public List<Event> getBetweenHalfOpen(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
-        return repository.getBetweenHalfOpen(getStartInclusive(startDate), getEndExclusive(endDate), userId);
+    public List<Event> getBetweenInclusive(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
+        return repository.getBetweenHalfOpen(atStartOfDayOrMin(startDate), atStartOfNextDayOrMax(endDate), userId);
     }
 }

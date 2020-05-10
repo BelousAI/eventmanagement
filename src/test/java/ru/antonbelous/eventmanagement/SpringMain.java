@@ -23,12 +23,12 @@ public class SpringMain {
             System.out.println();
 
             EventRestController eventController = appCtx.getBean(EventRestController.class);
-            List<EventTo> filteredEvents = eventController.getBetweenHalfOpen(
+            List<EventTo> filteredEvents = eventController.getBetween(
                     LocalDate.of(2020, Month.APRIL, 23), LocalTime.of(7, 0),
                     LocalDate.of(2020, Month.APRIL, 29), LocalTime.of(14, 0));
             filteredEvents.forEach(System.out::println);
             System.out.println();
-            System.out.println(eventController.getBetweenHalfOpen(null, null, null, null));
+            System.out.println(eventController.getBetween(null, null, null, null));
         }
     }
 }

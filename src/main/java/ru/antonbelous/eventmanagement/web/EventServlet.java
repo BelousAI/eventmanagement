@@ -30,7 +30,7 @@ public class EventServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
         eventController = springContext.getBean(EventRestController.class);
     }
 
@@ -63,7 +63,7 @@ public class EventServlet extends HttpServlet {
                 LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
                 LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
                 LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
-                request.setAttribute("events", eventController.getBetweenHalfOpen(startDate, startTime, endDate, endTime));
+                request.setAttribute("events", eventController.getBetween(startDate, startTime, endDate, endTime));
                 request.getRequestDispatcher("/events.jsp").forward(request, response);
                 break;
             case "all":
