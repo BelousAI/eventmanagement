@@ -10,6 +10,9 @@ public class Event extends AbstractBaseEntity {
     private String description;
     private Status currentStatus;
 
+    public Event() {
+    }
+
     public Event(LocalDateTime startDateTime, String description, Status currentStatus) {
         this(null, startDateTime, description, currentStatus);
     }
