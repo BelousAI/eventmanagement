@@ -3,22 +3,19 @@ package ru.antonbelous.eventmanagement.inmemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import ru.antonbelous.eventmanagement.EventTestData;
 import ru.antonbelous.eventmanagement.model.Event;
-import ru.antonbelous.eventmanagement.model.Status;
 import ru.antonbelous.eventmanagement.repository.EventRepository;
-import ru.antonbelous.eventmanagement.util.EventUtil;
 import ru.antonbelous.eventmanagement.util.Util;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static ru.antonbelous.eventmanagement.UserTestData.ADMIN_ID;
 import static ru.antonbelous.eventmanagement.UserTestData.USER_ID;
 
 @Repository
@@ -29,9 +26,9 @@ public class InMemoryEventRepository implements EventRepository {
     private Map<Integer, InMemoryBaseRepository<Event>> uidToEventMap = new ConcurrentHashMap<>();
 
     {
-        EventUtil.EVENTS.forEach(event -> save(event, USER_ID));
-        save(new Event(LocalDateTime.of(2020, Month.MAY, 1, 9, 0), "Первомайская демонстрация", Status.PLANNED), ADMIN_ID);
-        save(new Event(LocalDateTime.of(2020, Month.MAY, 2, 12, 0), "Подведение итогов", Status.PLANNED), ADMIN_ID);
+        InMemoryBaseRepository<Event> userEvents = new InMemoryBaseRepository<>();
+        EventTestData.USER_EVENTS.forEach(event -> userEvents.map.put(event.getId(), event));
+        uidToEventMap.put(USER_ID, userEvents);
     }
 
     @PostConstruct
