@@ -60,14 +60,14 @@ public class EventServiceTest {
         Event created = service.create(newEvent, USER_ID);
         Integer newId = created.getId();
         newEvent.setId(newId);
-        assertMatch(created, newEvent);
-        assertMatch(service.get(newId, USER_ID), newEvent);
+        EVENT_MATCHER.assertMatch(created, newEvent);
+        EVENT_MATCHER.assertMatch(service.get(newId, USER_ID), newEvent);
     }
 
     @Test
     public void get() throws Exception {
         Event actual = service.get(ADMIN_EVENT_ID, ADMIN_ID);
-        assertMatch(actual, ADMIN_EVENT1);
+        EVENT_MATCHER.assertMatch(actual, ADMIN_EVENT1);
     }
 
     @Test(expected = NotFoundException.class)
@@ -84,7 +84,7 @@ public class EventServiceTest {
     public void update() throws Exception {
         Event updated = getUpdated();
         service.update(updated, USER_ID);
-        assertMatch(service.get(EVENT1_ID, USER_ID), updated);
+        EVENT_MATCHER.assertMatch(service.get(EVENT1_ID, USER_ID), updated);
     }
 
     @Test(expected = NotFoundException.class)
@@ -94,12 +94,12 @@ public class EventServiceTest {
 
     @Test
     public void getAll() throws Exception {
-        assertMatch(service.getAll(USER_ID), USER_EVENTS);
+        EVENT_MATCHER.assertMatch(service.getAll(USER_ID), USER_EVENTS);
     }
 
     @Test
     public void getBetweenInclusive() throws Exception {
-        assertMatch(service.getBetweenInclusive(
+        EVENT_MATCHER.assertMatch(service.getBetweenInclusive(
                 LocalDate.of(2020, Month.APRIL, 17),
                 LocalDate.of(2020, Month.APRIL, 23), USER_ID),
                 EVENT3, EVENT2, EVENT1);
@@ -107,6 +107,6 @@ public class EventServiceTest {
 
     @Test
     public void getBetweenWithNullDates() throws Exception {
-        assertMatch(service.getBetweenInclusive(null, null, USER_ID), USER_EVENTS);
+        EVENT_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), USER_EVENTS);
     }
 }

@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
-import static org.assertj.core.api.Assertions.assertThat;
 import static ru.antonbelous.eventmanagement.model.AbstractBaseEntity.START_SEQ;
 
 public class EventTestData {
@@ -36,16 +35,5 @@ public class EventTestData {
         return new Event(EVENT1_ID, EVENT1.getStartDateTime(), "Обновленное событие", Status.CANCELED);
     }
 
-    public static void assertMatch(Event actual, Event expected) {
-        assertThat(actual).isEqualToComparingFieldByField(expected);
-    }
-
-    public static void assertMatch(Iterable<Event> actual, Event... expected) {
-        assertMatch(actual, Arrays.asList(expected));
-    }
-
-    public static void assertMatch(Iterable<Event> actual, Iterable<Event> expected) {
-        assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(expected);
-    }
-
+    public static TestMatcher<Event> EVENT_MATCHER = TestMatcher.of();
 }
