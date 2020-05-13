@@ -102,7 +102,7 @@ public class EventServiceTest {
         assertMatch(service.getBetweenInclusive(
                 LocalDate.of(2020, Month.APRIL, 17),
                 LocalDate.of(2020, Month.APRIL, 23), USER_ID),
-                EVENT5, EVENT6, EVENT7);
+                EVENT3, EVENT2, EVENT1);
     }
 
     @Test

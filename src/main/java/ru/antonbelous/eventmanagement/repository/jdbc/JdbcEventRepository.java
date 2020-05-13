@@ -42,7 +42,7 @@ public class JdbcEventRepository implements EventRepository {
                 .addValue("description", event.getDescription())
                 .addValue("start_date_time", event.getStartDateTime())
                 .addValue("user_id", userId)
-                .addValue("current_status", event.getCurrentStatus());
+                .addValue("current_status", event.getCurrentStatus().name());
 
         if (event.isNew()) {
             Number newId = insertEvent.executeAndReturnKey(map);

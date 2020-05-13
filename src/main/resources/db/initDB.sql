@@ -25,12 +25,13 @@ CREATE TABLE user_roles
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 CREATE TYPE status AS ENUM ('PLANNED', 'IN_PROGRESS', 'FINISHED', 'CANCELED');
+CREATE CAST (varchar AS status) WITH INOUT AS IMPLICIT;
 CREATE TABLE events (
                        id                INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
                        user_id           INTEGER   NOT NULL,
                        start_date_time   TIMESTAMP NOT NULL,
                        description       TEXT      NOT NULL,
-                       current_status    status,
+                       current_status    status    NOT NULL,
                        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 CREATE UNIQUE INDEX events_unique_user_datetime_idx
