@@ -28,10 +28,6 @@ import static ru.antonbelous.eventmanagement.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class EventServiceTest {
 
-    static {
-        SLF4JBridgeHandler.install();
-    }
-
     @Autowired
     private EventService service;
 

@@ -27,10 +27,6 @@ import static ru.antonbelous.eventmanagement.UserTestData.*;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class UserServiceTest {
 
-    static {
-        SLF4JBridgeHandler.install();
-    }
-
     @Autowired
     private UserService service;
 
