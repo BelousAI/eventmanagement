@@ -35,5 +35,5 @@ public class EventTestData {
         return new Event(EVENT1_ID, EVENT1.getStartDateTime(), "Обновленное событие", Status.CANCELED);
     }
 
-    public static TestMatcher<Event> EVENT_MATCHER = TestMatcher.of();
+    public static TestMatcher<Event> EVENT_MATCHER = TestMatcher.of("user");
 }
