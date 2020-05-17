@@ -43,6 +43,7 @@ public class InMemoryEventRepository implements EventRepository {
 
     @Override
     public Event save(Event event, int userId) {
+        Objects.requireNonNull(event, "event must not be null");
         InMemoryBaseRepository<Event> events = uidToEventMap.computeIfAbsent(userId, uid -> new InMemoryBaseRepository<>());
         return events.save(event);
     }
@@ -66,6 +67,8 @@ public class InMemoryEventRepository implements EventRepository {
 
     @Override
     public List<Event> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
+        Objects.requireNonNull(startDateTime, "startDateTime must not be null");
+        Objects.requireNonNull(endDateTime, "endDateTime must not be null");
         return getAllFiltered(userId, event -> Util.isBetweenHalfOpen(event.getStartDateTime(), startDateTime, endDateTime));
     }
 

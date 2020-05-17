@@ -2,6 +2,7 @@ package ru.antonbelous.eventmanagement.service;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import ru.antonbelous.eventmanagement.model.Event;
 import ru.antonbelous.eventmanagement.repository.EventRepository;
 
@@ -22,10 +23,12 @@ public class EventService {
     }
 
     public Event create(Event event, int userId) {
+        Assert.notNull(event, "event must not be null");
         return repository.save(event, userId);
     }
 
     public void update(Event event, int userId) {
+        Assert.notNull(event, "event must not be null");
         checkNotFoundWithId(repository.save(event, userId), event.getId());
     }
 

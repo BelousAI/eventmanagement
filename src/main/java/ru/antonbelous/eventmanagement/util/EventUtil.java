@@ -10,6 +10,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class EventUtil {
+    private EventUtil() {
+    }
 
     public static List<EventTo> getTos(Collection<Event> events) {
         return filteredByStreams(events, event -> true);
