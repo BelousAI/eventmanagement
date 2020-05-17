@@ -1,4 +1,4 @@
-package ru.antonbelous.eventmanagement.inmemory;
+package ru.antonbelous.eventmanagement.repository.inmemory;
 
 import ru.antonbelous.eventmanagement.model.AbstractBaseEntity;
 

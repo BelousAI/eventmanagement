@@ -1,4 +1,4 @@
-package ru.antonbelous.eventmanagement.inmemory;
+package ru.antonbelous.eventmanagement.repository.inmemory;
 
 import org.springframework.stereotype.Repository;
 import ru.antonbelous.eventmanagement.UserTestData;

@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.antonbelous.eventmanagement.UserTestData;
-import ru.antonbelous.eventmanagement.inmemory.InMemoryUserRepository;
+import ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository;
 import ru.antonbelous.eventmanagement.model.User;
 import ru.antonbelous.eventmanagement.util.exception.NotFoundException;
 
 import java.util.Collection;
 
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/inmemory.xml"})
 @RunWith(SpringRunner.class)
 public class InMemoryAdminRestControllerSpringTest {
 

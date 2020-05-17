@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.antonbelous.eventmanagement.UserTestData;
-import ru.antonbelous.eventmanagement.inmemory.InMemoryUserRepository;
+import ru.antonbelous.eventmanagement.repository.inmemory.InMemoryUserRepository;
 import ru.antonbelous.eventmanagement.model.User;
 import ru.antonbelous.eventmanagement.util.exception.NotFoundException;
 
@@ -21,7 +21,7 @@ public class InMemoryAdminRestControllerTest {
 
     @BeforeClass
     public static void beforeClass() {
-        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml", "classpath:spring/inmemory.xml");
         log.info("\n{}\n", Arrays.toString(appCtx.getBeanDefinitionNames()));
         controller = appCtx.getBean(AdminRestController.class);
     }
