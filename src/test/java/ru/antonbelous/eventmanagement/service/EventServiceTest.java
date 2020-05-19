@@ -1,8 +1,13 @@
 package ru.antonbelous.eventmanagement.service;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -14,7 +19,9 @@ import ru.antonbelous.eventmanagement.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.concurrent.TimeUnit;
 
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.antonbelous.eventmanagement.EventTestData.*;
 import static ru.antonbelous.eventmanagement.UserTestData.ADMIN_ID;
 import static ru.antonbelous.eventmanagement.UserTestData.USER_ID;
@@ -26,6 +33,29 @@ import static ru.antonbelous.eventmanagement.UserTestData.USER_ID;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class EventServiceTest {
+    private static final Logger log = getLogger(EventServiceTest.class);
+
+    private static StringBuilder results = new StringBuilder();
+
+    @Rule
+    // http://stackoverflow.com/questions/14892125/what-is-the-best-practice-to-determine-the-execution-time-of-the-bussiness-relev
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void finished(long nanos, Description description) {
+            String result = String.format("\n%-25s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            results.append(result);
+            log.info(result + " ms\n");
+        }
+    };
+
+    @AfterClass
+    public static void printResult() {
+        log.info("\n---------------------------------" +
+                "\nTest                 Duration, ms" +
+                "\n---------------------------------" +
+                results +
+                "\n---------------------------------");
+    }
 
     @Autowired
     private EventService service;
@@ -39,14 +69,16 @@ public class EventServiceTest {
         Assert.assertNull(repository.get(EVENT1_ID, USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deleteNotFound() throws Exception {
-        service.delete(1, USER_ID);
+        Assert.assertThrows(NotFoundException.class,
+                () -> service.delete(1, USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deleteNotOwn() throws Exception {
-        service.delete(EVENT1_ID, ADMIN_ID);
+        Assert.assertThrows(NotFoundException.class,
+                () -> service.delete(EVENT1_ID, ADMIN_ID));
     }
 
     @Test
@@ -65,14 +97,16 @@ public class EventServiceTest {
         EVENT_MATCHER.assertMatch(actual, ADMIN_EVENT1);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() throws Exception {
-        service.get(1, USER_ID);
+        Assert.assertThrows(NotFoundException.class,
+                () -> service.get(1, USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotOwn() throws Exception {
-        service.get(EVENT1_ID, ADMIN_ID);
+        Assert.assertThrows(NotFoundException.class,
+                () -> service.get(EVENT1_ID, ADMIN_ID));
     }
 
     @Test
@@ -82,9 +116,11 @@ public class EventServiceTest {
         EVENT_MATCHER.assertMatch(service.get(EVENT1_ID, USER_ID), updated);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void updateNotFound() throws Exception {
-        service.update(EVENT1, ADMIN_ID);
+        NotFoundException ex = Assert.assertThrows(NotFoundException.class,
+                () -> service.update(EVENT1, ADMIN_ID));
+        Assert.assertEquals("Not found entity with id=" + EVENT1_ID, ex.getMessage());
     }
 
     @Test

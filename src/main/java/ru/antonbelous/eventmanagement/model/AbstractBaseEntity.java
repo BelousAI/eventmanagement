@@ -1,5 +1,7 @@
 package ru.antonbelous.eventmanagement.model;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 
 @MappedSuperclass
@@ -41,7 +43,7 @@ public abstract class AbstractBaseEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
             return false;
         }
         AbstractBaseEntity that = (AbstractBaseEntity) o;
