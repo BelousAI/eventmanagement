@@ -11,6 +11,7 @@ import static java.time.LocalDateTime.of;
 import static ru.antonbelous.eventmanagement.model.AbstractBaseEntity.START_SEQ;
 
 public class EventTestData {
+    public static TestMatcher<Event> EVENT_MATCHER = TestMatcher.usingFieldsComparator("user");
 
     public static final int EVENT1_ID = START_SEQ + 2;
     public static final int ADMIN_EVENT_ID = START_SEQ + 9;
@@ -27,13 +28,12 @@ public class EventTestData {
 
     public static final List<Event> USER_EVENTS = Arrays.asList(EVENT7, EVENT6, EVENT5, EVENT4, EVENT3, EVENT2, EVENT1);
 
-    public static Event getCreated() {
+
+    public static Event getNew() {
         return new Event(null, of(2020, Month.MAY, 12, 9, 0), "Запланированное событие", Status.PLANNED);
     }
 
     public static Event getUpdated() {
         return new Event(EVENT1_ID, EVENT1.getStartDateTime(), "Обновленное событие", Status.CANCELED);
     }
-
-    public static TestMatcher<Event> EVENT_MATCHER = TestMatcher.of("user");
 }

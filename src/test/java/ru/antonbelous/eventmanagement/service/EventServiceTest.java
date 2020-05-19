@@ -3,12 +3,11 @@ package ru.antonbelous.eventmanagement.service;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.antonbelous.eventmanagement.model.Event;
 import ru.antonbelous.eventmanagement.repository.EventRepository;
 import ru.antonbelous.eventmanagement.util.exception.NotFoundException;
@@ -24,7 +23,7 @@ import static ru.antonbelous.eventmanagement.UserTestData.USER_ID;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class EventServiceTest {
 
@@ -52,7 +51,7 @@ public class EventServiceTest {
 
     @Test
     public void create() throws Exception {
-        Event newEvent = getCreated();
+        Event newEvent = getNew();
         Event created = service.create(newEvent, USER_ID);
         Integer newId = created.getId();
         newEvent.setId(newId);

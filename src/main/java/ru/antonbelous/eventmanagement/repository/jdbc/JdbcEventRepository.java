@@ -78,9 +78,9 @@ public class JdbcEventRepository implements EventRepository {
     }
 
     @Override
-    public List<Event> getBetweenHalfOpen(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+    public List<Event> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM events WHERE user_id=?  AND start_date_time >=  ? AND start_date_time < ? ORDER BY start_date_time DESC",
-                ROW_MAPPER, userId, startDate, endDate);
+                ROW_MAPPER, userId, startDateTime, endDateTime);
     }
 }
