@@ -31,13 +31,6 @@
                         <option value="${statusVar}" ${event.currentStatus == statusVar ? 'selected' : ''}>${statusVar}</option>
                     </c:forEach>
                 </select>
-
-<%--                <select id="status" name="status">--%>
-<%--                    <option value="PLANNED">PLANNED</option>--%>
-<%--                    <option value="IN_PROGRESS" ${event.currentStatus.name() == 'IN_PROGRESS' ? 'selected' : ''}>IN_PROGRESS</option>--%>
-<%--                    <option value="FINISHED" ${event.currentStatus.name() == 'FINISHED' ? 'selected' : ''}>FINISHED</option>--%>
-<%--                    <option value="CANCELED" ${event.currentStatus.name() == 'CANCELED' ? 'selected' : ''}>CANCELED</option>--%>
-<%--                </select>--%>
             </dd>
         </dl>
         <button type="submit">Save</button>

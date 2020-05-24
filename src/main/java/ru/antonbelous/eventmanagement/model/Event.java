@@ -13,8 +13,6 @@ import java.time.LocalTime;
         @NamedQuery(name = Event.DELETE, query = "DELETE FROM Event e WHERE e.id=:id AND e.user.id=:userId"),
         @NamedQuery(name = Event.GET_BETWEEN, query = "SELECT e FROM Event e " +
                 "WHERE e.user.id=:userId AND e.startDateTime >= :startDateTime AND e.startDateTime < :endDateTime ORDER BY e.startDateTime DESC"),
-//        @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m SET m.dateTime = :datetime, m.calories= :calories," +
-//                "m.description=:desc where m.id=:id and m.user.id=:userId")
 })
 @Entity
 @Table(name = "events", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "start_date_time"}, name = "events_unique_user_datetime_idx")})
